@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: PhotonServerSettings
   m_EditorClassIdentifier: 
   AppSettings:
-    AppIdRealtime: a99393d9-9e40-46ba-9b9c-d5d1a50e9a5a
+    AppIdRealtime: 69df1c67-1b02-4863-adc5-4c3baee56ac9
     AppIdFusion: 
     AppIdChat: 
     AppIdVoice: 
@@ -34,12 +34,18 @@ MonoBehaviour:
   RunInBackground: 1
   StartInOfflineMode: 0
   RpcList:
+  - ChangeTurn
   - ClickRpc
+  - DestroyObj
   - DestroyRpc
   - DestroySpaceship
   - Fire
+  - GoalCount
+  - pingUISetUp
   - RespawnSpaceship
-  - ChangeTurn
+  - FightWin
+  - FightLose
+  - MoveLeft
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

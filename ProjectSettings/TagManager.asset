@@ -3,7 +3,18 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - VisableArea
+  - Monster
+  - PlayerDice
+  - Goal
+  - Rock
+  - Trap
+  - HumanDiceSide
+  - DwarfDiceSide
+  - GiantDiceSide
+  - Walls
+  - Door
   layers:
   - Default
   - TransparentFX
@@ -11,7 +22,7 @@ TagManager:
   - 
   - Water
   - UI
-  - 
+  - Ground
   - 
   - 
   - 

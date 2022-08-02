@@ -5,36 +5,31 @@ using Photon.Pun;
 
 public class CameraManager : MonoBehaviour
 {
-    public GameObject Camera_1;
-    public GameObject Camera_2;
-    public GameObject Camera_3;
 
-    public GameObject MainCamera;
+    public static Camera MainCamera;
 
-    public Transform targetPlayer;
-    public Vector3 cameraOffset;
+    private Transform targetPlayer;
+    private Vector3 cameraOffset;
 
     void Start()
     {
+        MainCamera = Camera.main;
         if (PhotonNetwork.LocalPlayer.ActorNumber == 1)
         {
-            Camera_1.SetActive(true);
-            MainCamera = Camera_1;
-            targetPlayer = GameObject.Find("Player1(Clone)").transform;
+            MainCamera.transform.position = new Vector3(0f, 16.2f, -11.64f);
+            //targetPlayer = GameObject.Find("Human(Clone)").transform;
         }
         else if (PhotonNetwork.LocalPlayer.ActorNumber == 2)
         {
-            Camera_2.SetActive(true);
-            MainCamera = Camera_2;
-            targetPlayer = GameObject.Find("Player2(Clone)").transform;
+            MainCamera.transform.position = new Vector3(3.2f, 36.5f, -34.4f);
+            //targetPlayer = GameObject.Find("Giant(Clone)").transform;
         }
         else if (PhotonNetwork.LocalPlayer.ActorNumber == 3)
         {
-            Camera_3.SetActive(true);
-            MainCamera = Camera_3;
-            targetPlayer = GameObject.Find("Player3(Clone)").transform;
-
+            MainCamera.transform.position = new Vector3(0f, 27.7f, -25.1f);
+            //targetPlayer = GameObject.Find("Dwarf(Clone)").transform;
         }
+        targetPlayer = GameManager.instance.MainPlayer.transform;
         cameraOffset = MainCamera.transform.position - targetPlayer.transform.position;
     }
 

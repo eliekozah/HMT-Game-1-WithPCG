@@ -6,9 +6,10 @@ using Photon.Pun.UtilityScripts;
 
 public class SpawnPlayer : MonoBehaviour
 {
-    public GameObject playerPrefab;
-    public GameObject playerPrefab2;
-    public GameObject playerPrefab3;
+    public GameObject DwarfPlayer;
+    public GameObject GiantPlayer;
+    public GameObject HumanPlayer;
+
     public float minX;
     public float maxX;
 
@@ -17,15 +18,16 @@ public class SpawnPlayer : MonoBehaviour
         Debug.Log(PhotonNetwork.LocalPlayer.ActorNumber);
         if (PhotonNetwork.LocalPlayer.ActorNumber == 1)
         {
-            PhotonNetwork.Instantiate(playerPrefab.name, new Vector3(0, 0, 0), Quaternion.identity);
+            GameManager.instance.MainPlayer =  PhotonNetwork.Instantiate(DwarfPlayer.name, new Vector3(0, -0.86f, 3.2f), Quaternion.identity);
         }
         else if (PhotonNetwork.LocalPlayer.ActorNumber == 2)
         {
-            PhotonNetwork.Instantiate(playerPrefab2.name, new Vector3(0, 1, 0), Quaternion.identity);
+            GameManager.instance.MainPlayer = PhotonNetwork.Instantiate(GiantPlayer.name, new Vector3(3.2f, -0.86f, 0), Quaternion.identity);
         }
         else if (PhotonNetwork.LocalPlayer.ActorNumber == 3)
         {
-            PhotonNetwork.Instantiate(playerPrefab3.name, new Vector3(0, 0.5f, 0), Quaternion.identity);
+            GameManager.instance.MainPlayer = PhotonNetwork.Instantiate(HumanPlayer.name, new Vector3(0, -0.86f, 0), Quaternion.identity);
         }
+        GameManager.instance.MainPlayer.transform.GetChild(3).gameObject.SetActive(true);
     }
 }
