@@ -6,6 +6,8 @@ using Photon.Pun;
 
 public class Player : MonoBehaviour
 {
+    PhotonView view;
+    public int playerId;
     public float speed;
 
     [HideInInspector] public Transform movePoint;
@@ -15,25 +17,33 @@ public class Player : MonoBehaviour
     public int moveCount;
     public static bool changeTurn;
 
-    PhotonView view;
+    private Animator animator;
+
+    public CameraManager cameraManager;
 
     void Awake()
     {
         view = GetComponent<PhotonView>();
+
     }
     private void Start()
     {
+        playerId = GameManager.instance.playerIDs.IndexOf(this.gameObject.GetPhotonView().ViewID);
+        cameraManager = FindObjectOfType<CameraManager>();
         movePoint = this.transform.GetChild(1);
         movePoint.parent = null;
         prevMovePointPos = movePoint.position;
         moveCount = 0;
         changeTurn = false;
         movable = new bool[4] { true, true, true, true};
+
+        animator = this.transform.GetChild(0).GetComponent<Animator>();
+        animator.SetBool("Idle", true);
     }
 
     void Update()
     {
-        if (view.IsMine && GameManager.instance.turn == PhotonNetwork.LocalPlayer.ActorNumber && !CombatSystem.instance.isInFight)
+        if (view.IsMine && GameManager.instance.turn == PhotonNetwork.LocalPlayer.ActorNumber && !CombatSystem.instance.isInFight && cameraManager.cameraIsSet)
         {
             playerMovement();
         }
@@ -106,6 +116,16 @@ public class Player : MonoBehaviour
                     moveCount++;
                 }
             }
+            
+            animator.SetBool("Walk", false);
+            animator.SetBool("Attact", false);
+            animator.SetBool("Idle", true);
+        }
+        else
+        {
+            animator.SetBool("Idle", false);
+            animator.SetBool("Attact", false);
+            animator.SetBool("Walk", true);
         }
     }
     private void OnTriggerEnter(Collider col)
@@ -115,7 +135,11 @@ public class Player : MonoBehaviour
             Debug.Log("Triggered Goal");
             if (checkRightGoal(col.gameObject))
             {
-                GameManager.instance.CallGoalCount();
+                if (view.IsMine)
+                {
+                    GameManager.instance.CallGoalCount();
+                }
+
                 if (PhotonNetwork.IsMasterClient)
                 {
                     PhotonNetwork.Destroy(col.gameObject);
@@ -123,21 +147,41 @@ public class Player : MonoBehaviour
             }
         }
 
+        if (col.gameObject.CompareTag("Door"))
+        {
+            Debug.Log("Triggered Door");
+            if (view.IsMine && GameManager.instance.Goal == 3)  //After collect all the goal, the door can be stepped and end game
+            {
+                GameManager.instance.CallEndGame();
+            }
+        }
+
         if (col.gameObject.CompareTag("Rock"))
         {
+            if (view.IsMine)
+            {
+                playAttactAnimation();
+            }
             Debug.Log("Triggered Rock");
-            Debug.Log("postion: " + this.transform.position);
             CombatSystem.instance.isInFight = true;
             CombatSystem.instance.StartFight(col.gameObject, 0, this.gameObject);
         }
         else if (col.gameObject.CompareTag("Trap"))
         {
+            if (view.IsMine)
+            {
+                playAttactAnimation();
+            }
             Debug.Log("Triggered Trap");
             CombatSystem.instance.isInFight = true;
             CombatSystem.instance.StartFight(col.gameObject, 1, this.gameObject);
         }
         else if (col.gameObject.CompareTag("Monster"))
         {
+            if (view.IsMine)
+            {
+                playAttactAnimation();
+            }
             Debug.Log("Triggered Monster");
             CombatSystem.instance.isInFight = true;
             CombatSystem.instance.StartFight(col.gameObject, 2, this.gameObject);
@@ -146,15 +190,15 @@ public class Player : MonoBehaviour
 
     private bool checkRightGoal(GameObject goal)
     {
-        if (PhotonNetwork.LocalPlayer.ActorNumber == 1 && goal.name == "DwarfGoal")
+        if (playerId == 0 && goal.name == "DwarfGoal")
         {
             return true;
         }
-        else if (PhotonNetwork.LocalPlayer.ActorNumber == 2 && goal.name == "GiantGoal")
+        else if (playerId == 1 && goal.name == "GiantGoal")
         {
             return true;
         }
-        else if (PhotonNetwork.LocalPlayer.ActorNumber == 3 && goal.name == "HumanGoal")
+        else if (playerId == 2 && goal.name == "HumanGoal")
         {
             return true;
         }
@@ -162,6 +206,13 @@ public class Player : MonoBehaviour
         {
             return false;
         }
+    }
+
+    private void playAttactAnimation()
+    {
+        animator.SetBool("Idle", false);
+        animator.SetBool("Walk", false);
+        animator.SetBool("Attack", true);
     }
 
 }

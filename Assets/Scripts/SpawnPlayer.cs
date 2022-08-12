@@ -10,6 +10,8 @@ public class SpawnPlayer : MonoBehaviour
     public GameObject GiantPlayer;
     public GameObject HumanPlayer;
 
+    public GameObject newPlayer;
+
     public float minX;
     public float maxX;
 
@@ -18,16 +20,19 @@ public class SpawnPlayer : MonoBehaviour
         Debug.Log(PhotonNetwork.LocalPlayer.ActorNumber);
         if (PhotonNetwork.LocalPlayer.ActorNumber == 1)
         {
-            GameManager.instance.MainPlayer =  PhotonNetwork.Instantiate(DwarfPlayer.name, new Vector3(0, -0.86f, 3.2f), Quaternion.identity);
+            newPlayer =  PhotonNetwork.Instantiate(DwarfPlayer.name, new Vector3(0, -0.86f, 3.2f), Quaternion.identity);
         }
         else if (PhotonNetwork.LocalPlayer.ActorNumber == 2)
         {
-            GameManager.instance.MainPlayer = PhotonNetwork.Instantiate(GiantPlayer.name, new Vector3(3.2f, -0.86f, 0), Quaternion.identity);
+            newPlayer = PhotonNetwork.Instantiate(GiantPlayer.name, new Vector3(3.2f, -0.86f, 0), Quaternion.identity);
         }
         else if (PhotonNetwork.LocalPlayer.ActorNumber == 3)
         {
-            GameManager.instance.MainPlayer = PhotonNetwork.Instantiate(HumanPlayer.name, new Vector3(0, -0.86f, 0), Quaternion.identity);
+            newPlayer = PhotonNetwork.Instantiate(HumanPlayer.name, new Vector3(0, -0.86f, 0), Quaternion.identity);
         }
-        GameManager.instance.MainPlayer.transform.GetChild(3).gameObject.SetActive(true);
+        GameManager.instance.CallAddPlayerID(PhotonNetwork.LocalPlayer.ActorNumber-1, newPlayer.GetPhotonView().ViewID);
+        GameManager.instance.MainPlayer = newPlayer;
+        GameManager.instance.MainPlayer.transform.GetChild(3).gameObject.SetActive(true); //open vision Mask
+        GameManager.instance.MainPlayer.transform.GetChild(10).gameObject.SetActive(false); //close shared Mask
     }
 }

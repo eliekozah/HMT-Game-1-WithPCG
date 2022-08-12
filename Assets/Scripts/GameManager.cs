@@ -14,11 +14,12 @@ public class GameManager : MonoBehaviour
     public Text goalIndicatorText;
     public Text actionCountTxt;
 
-    public GameObject Player1Items;
+/*    public GameObject Player1Items;
     public GameObject Player2Items;
-    public GameObject Player3Items;
+    public GameObject Player3Items;*/
 
     public GameObject MainPlayer;
+    public List<int> playerIDs = new List<int>();
     public int Goal;
     public int moveLeft;
 
@@ -26,6 +27,9 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
+        playerIDs.Add(0);
+        playerIDs.Add(0);
+        playerIDs.Add(0);
     }
     private void Start()
     {
@@ -57,6 +61,14 @@ public class GameManager : MonoBehaviour
     public void CallMoveLeft(int num)
     {
         photonView.RPC("MoveLeft", RpcTarget.All, num);
+    }
+    public void CallAddPlayerID(int playerNum, int id)
+    {
+        photonView.RPC("AddPlayerID", RpcTarget.All, playerNum, id);
+    }
+    public void CallEndGame()
+    {
+        photonView.RPC("EndGame", RpcTarget.All);
     }
 
     [PunRPC]   
@@ -94,22 +106,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void setVisalbleObject()
-    {
-        if (PhotonNetwork.LocalPlayer.ActorNumber == 1)
-        {
-            Player1Items.SetActive(true);
-        }
-        else if (PhotonNetwork.LocalPlayer.ActorNumber == 2)
-        {
-            Player2Items.SetActive(true);
-        }
-        else if (PhotonNetwork.LocalPlayer.ActorNumber == 3)
-        {
-            Player3Items.SetActive(true);
-        }
-    }
-
     [PunRPC]
     public void GoalCount()
     {
@@ -122,4 +118,34 @@ public class GameManager : MonoBehaviour
         moveLeft = num;
     }
 
+    [PunRPC]
+    public void AddPlayerID(int playerNum, int id)
+    {
+        playerIDs[playerNum] = id;
+    }
+
+    [PunRPC]
+    public void EndGame()
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            PhotonNetwork.LoadLevel("EndGame");
+        }
+    }
+
+    /*    private void setVisalbleObject()
+        {
+            if (PhotonNetwork.LocalPlayer.ActorNumber == 1)
+            {
+                Player1Items.SetActive(true);
+            }
+            else if (PhotonNetwork.LocalPlayer.ActorNumber == 2)
+            {
+                Player2Items.SetActive(true);
+            }
+            else if (PhotonNetwork.LocalPlayer.ActorNumber == 3)
+            {
+                Player3Items.SetActive(true);
+            }
+        }*/
 }

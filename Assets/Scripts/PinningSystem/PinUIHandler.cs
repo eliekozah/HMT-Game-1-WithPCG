@@ -6,19 +6,20 @@ using Photon.Pun;
 
 public class PinUIHandler : MonoBehaviour
 {
-    public int IconType; //0: question, 1: notice
-    public Sprite questionIcon;
-    public Sprite noticeIcon;
-    public Sprite locationIcon;
+    public int playerPinnedIndex; // Player that made this pin
+    public int IconType; // 0: danger, 1: Assist, 2: OMW, 3: Unknown, 4: location
+    public Sprite[] pinIcons = new Sprite[5]; // 0: danger, 1: Assist, 2: OMW, 3: Unknown, 4: location
 
     private RectTransform rectTransform;
-    private Vector3 pingPosition;
+    private Vector3 pingPosition; // 3D pin position
     private Transform Player;
 
     private float VisionDistance;
     private float pinDistance;
-    public void SetUp(Vector3 pingPosition, int iconType)
+
+    public void SetUp(Vector3 pingPosition, int iconType, int player)
     {
+        playerPinnedIndex = player;
         IconType = iconType;
         this.pingPosition = pingPosition;
         rectTransform = transform.GetComponent<RectTransform>();
@@ -26,35 +27,32 @@ public class PinUIHandler : MonoBehaviour
 
         if (PhotonNetwork.LocalPlayer.ActorNumber == 1)
         {
-            VisionDistance = 5f;
+            VisionDistance = 4.7f;
         }
         else if (PhotonNetwork.LocalPlayer.ActorNumber == 2)
         {
-            VisionDistance = 10f;
+            VisionDistance = 10.2f;
         }
         else if (PhotonNetwork.LocalPlayer.ActorNumber == 3)
         {
-            VisionDistance = 7.5f;
+            VisionDistance = 7.4f;
         }
-        Debug.Log("Setup: " + pingPosition + " Player: " + Player);
+        //Debug.Log("Setup: " + pingPosition + " Player: " + Player);
     }
 
     private void Update()
     {
         pinDistance = Vector3.Distance(Player.position, this.pingPosition);
-        if (pinDistance > VisionDistance)
+        //Debug.Log(pinDistance);
+        if (pinDistance > VisionDistance) // if pin position is out of visable area, show 2D pinIcon
         {
-            if (PinningSystem._IsPinnable && IconType == 0)
+            if (PinningSystem.pinViewEnable[playerPinnedIndex]) // if overlap with other, pinViewEnabled = true
             {
-                this.GetComponent<Image>().sprite = questionIcon;
+                this.GetComponent<Image>().sprite = pinIcons[IconType]; // show specific pin icon
             }
-            else if(PinningSystem._IsPinnable && IconType == 1)
+            else  // if not overlap with other
             {
-                this.GetComponent<Image>().sprite = noticeIcon;
-            }
-            else
-            {
-                this.GetComponent<Image>().sprite = locationIcon;
+                this.GetComponent<Image>().sprite = pinIcons[4]; //show location pin icon
             }
             this.GetComponent<Image>().enabled = true;
             Vector3 fromPosition = new Vector3(Player.position.x, Player.position.z, 0);

@@ -83,6 +83,8 @@ public class CombatSystem : MonoBehaviour
         if (fightType == 2)
         {
             monsterNum = instance.enemy.GetComponent<Monster>().num;
+            enemy.GetComponent<Animator>().SetBool("Attack", true);
+            enemy.GetComponent<Animator>().SetBool("Idle", false);
         }
     }
     private void showPanel()
@@ -161,6 +163,8 @@ public class CombatSystem : MonoBehaviour
             yield return new WaitForSeconds(2f);
             EndGame();
             CallFightLose();
+            enemy.GetComponent<Animator>().SetBool("Attack", false);
+            enemy.GetComponent<Animator>().SetBool("Idle", true);
         }
     }
 
@@ -188,7 +192,10 @@ public class CombatSystem : MonoBehaviour
         //win
         if (PhotonNetwork.IsMasterClient)
         {
-            PhotonNetwork.Destroy(enemy);
+            if (enemy!=null)
+            {
+                PhotonNetwork.Destroy(enemy);
+            }
         }
         isInFight = false;
         Debug.Log("FightEnd : win");
