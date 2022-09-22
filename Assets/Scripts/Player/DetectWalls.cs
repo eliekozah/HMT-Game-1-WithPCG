@@ -57,4 +57,5 @@ public class DetectWalls : MonoBehaviour
             player.GetComponent<Player>().movable[dir] = true;
         }
     }
+
 }

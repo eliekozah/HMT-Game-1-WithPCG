@@ -60,7 +60,7 @@ Transform:
   m_GameObject: {fileID: 212993159754008333}
   m_LocalRotation: {x: 0, y: 0.97583675, z: -0, w: -0.21850082}
   m_LocalPosition: {x: -16.91, y: 8.351, z: -17.07}
-  m_LocalScale: {x: 3, y: 3, z: 3}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children:
   - {fileID: 1904618134918784847}
   - {fileID: 2270726749155173355}
@@ -150,6 +150,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5acb24ea0c95db144ad5f2cf9c22859a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  monsterType: 3
   num: 
 --- !u!1 &340473501301284286
 GameObject:

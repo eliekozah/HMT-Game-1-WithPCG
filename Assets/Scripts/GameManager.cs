@@ -7,22 +7,23 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance = null;
-    public int turn;
     private PhotonView photonView;
+    private GameData gameData;
 
+    // UI
     public Text turnIndicatorText;
     public Text goalIndicatorText;
     public Text actionCountTxt;
 
-/*    public GameObject Player1Items;
+    [HideInInspector] public int turn; // Indicate which player's turn
+    [HideInInspector] public GameObject MainPlayer; 
+    [HideInInspector] public List<int> playerIDs = new List<int>(); // All the players' Photon ViewID
+    [HideInInspector] public int Goal; // Goal collected, shown on the UI
+    [HideInInspector] public int moveLeft; // Player's remaining moves, shown on the UI
+
+    /*    public GameObject Player1Items;
     public GameObject Player2Items;
     public GameObject Player3Items;*/
-
-    public GameObject MainPlayer;
-    public List<int> playerIDs = new List<int>();
-    public int Goal;
-    public int moveLeft;
-
 
     private void Awake()
     {
@@ -33,14 +34,15 @@ public class GameManager : MonoBehaviour
     }
     private void Start()
     {
-        turn = 1;
+        gameData = FindObjectOfType<GameData>();
+        turn = 1; // Player 1 goes first
         photonView = GetComponent<PhotonView>();
-        changeTurnIndicatorText();
+        ChangeTurnIndicatorText(); 
         //setVisalbleObject();
     }
     private void Update()
     {
-        if (Player.changeTurn)
+        if (Player.changeTurn) // if turn changed
         {
             Player.changeTurn = false;
             Debug.Log("Change Turn");
@@ -71,10 +73,22 @@ public class GameManager : MonoBehaviour
         photonView.RPC("EndGame", RpcTarget.All);
     }
 
+    public void CallNextLevel()
+    {
+        if (gameData.gameLevel == 5)
+        {
+            CallEndGame();
+        }
+        else
+        {
+            photonView.RPC("LoadNextLevel", RpcTarget.All);
+        }
+    }
+
     [PunRPC]   
     public void ChangeTurn()
     {
-        if (turn == 3)
+        if (turn == 3) // the next turn for player 3 is player 1
         {
             turn = 1;
         }
@@ -83,12 +97,12 @@ public class GameManager : MonoBehaviour
             turn += 1;
         }
 
-        changeTurnIndicatorText();
+        ChangeTurnIndicatorText();
     }
 
-    private void changeTurnIndicatorText()
+    private void ChangeTurnIndicatorText()
     {
-        if (instance.turn == PhotonNetwork.LocalPlayer.ActorNumber)
+        if (instance.turn == PhotonNetwork.LocalPlayer.ActorNumber) 
         {
             turnIndicatorText.text = "Your turn";
         }
@@ -121,7 +135,7 @@ public class GameManager : MonoBehaviour
     [PunRPC]
     public void AddPlayerID(int playerNum, int id)
     {
-        playerIDs[playerNum] = id;
+        playerIDs[playerNum-1] = id;
     }
 
     [PunRPC]
@@ -129,7 +143,17 @@ public class GameManager : MonoBehaviour
     {
         if (PhotonNetwork.IsMasterClient)
         {
-            PhotonNetwork.LoadLevel("EndGame");
+            PhotonNetwork.LoadLevel("EndGame"); 
+        }
+    }
+
+    [PunRPC]
+    public void LoadNextLevel()
+    {
+        int nextLevel = gameData.gameLevel + 1;
+        if (PhotonNetwork.IsMasterClient)
+        {
+            PhotonNetwork.LoadLevel("Level_" + nextLevel.ToString()); // Load Next Level
         }
     }
 

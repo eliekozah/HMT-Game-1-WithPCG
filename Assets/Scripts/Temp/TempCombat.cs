@@ -80,7 +80,12 @@ public class TempCombat : MonoBehaviour
         }
         else
         {
-            enemyTxt.text = "Monster:" + monsterNum[0].ToString() + " " + monsterNum[1].ToString() + " " + monsterNum[2].ToString();
+            string txt = "Monster:";
+            for (int i = 0; i < monsterNum.Length; i++)
+            {
+                txt = txt + monsterNum[i].ToString() + " ";
+            }
+            enemyTxt.text = txt;
         }
 
     }

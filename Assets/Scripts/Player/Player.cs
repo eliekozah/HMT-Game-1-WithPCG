@@ -7,19 +7,20 @@ using Photon.Pun;
 public class Player : MonoBehaviour
 {
     PhotonView view;
-    public int playerId;
-    public float speed;
 
+    [HideInInspector] public float speed;
+    [HideInInspector] public int playerId;
     [HideInInspector] public Transform movePoint;
     [HideInInspector] public Vector3 prevMovePointPos;
     [HideInInspector] public bool[] movable; // detecting walls. index 0: left, 1: right, 2: front, 3: back 
 
-    public int moveCount;
+    [HideInInspector] public int moveCount;
     public static bool changeTurn;
 
     private Animator animator;
 
     public CameraManager cameraManager;
+    public GameData gameData;
 
     void Awake()
     {
@@ -29,10 +30,14 @@ public class Player : MonoBehaviour
     private void Start()
     {
         playerId = GameManager.instance.playerIDs.IndexOf(this.gameObject.GetPhotonView().ViewID);
+        speed = 3.0f;
         cameraManager = FindObjectOfType<CameraManager>();
+        gameData = FindObjectOfType<GameData>();
+
         movePoint = this.transform.GetChild(1);
         movePoint.parent = null;
         prevMovePointPos = movePoint.position;
+
         moveCount = 0;
         changeTurn = false;
         movable = new bool[4] { true, true, true, true};
@@ -43,9 +48,16 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        if (view.IsMine && GameManager.instance.turn == PhotonNetwork.LocalPlayer.ActorNumber && !CombatSystem.instance.isInFight && cameraManager.cameraIsSet)
+        if (view.IsMine && GameManager.instance.turn == PhotonNetwork.LocalPlayer.ActorNumber && !CombatSystem.instance.isInFight)
         {
-            playerMovement();
+            if (!gameData.differentCameraView)
+            {
+                playerMovement();
+            }
+            else if(cameraManager.cameraIsSet)
+            {
+                playerMovement();
+            }
         }
     }
 
@@ -56,20 +68,19 @@ public class Player : MonoBehaviour
         {
             if (PhotonNetwork.LocalPlayer.ActorNumber == 1)
             {
-                GameManager.instance.CallMoveLeft(6 - moveCount);
+                GameManager.instance.CallMoveLeft( gameData.dwarfMovecount - moveCount);
             }
-            else
+            else if (PhotonNetwork.LocalPlayer.ActorNumber == 2)
             {
-                GameManager.instance.CallMoveLeft(4 - moveCount);
+                GameManager.instance.CallMoveLeft(gameData.giantMovecount - moveCount);
+            }
+            else if (PhotonNetwork.LocalPlayer.ActorNumber == 3)
+            {
+                GameManager.instance.CallMoveLeft(gameData.humanMovecount - moveCount);
             }
 
             prevMovePointPos = movePoint.position;
-            if (PhotonNetwork.LocalPlayer.ActorNumber != 1 && moveCount == 4) // Giant & Human only has 4 actions
-            {
-                moveCount = 0;
-                changeTurn = true;
-            }
-            else if (moveCount == 6) // Dwarf  has 6 actions
+            if (checkMoveCount()) 
             {
                 moveCount = 0;
                 changeTurn = true;
@@ -78,8 +89,8 @@ public class Player : MonoBehaviour
             {
                 if (Input.GetAxisRaw("Horizontal") < 0 && movable[0])  //left
                 {
-                    movePoint.position += new Vector3(Input.GetAxisRaw("Horizontal") * 3 - 0.2f, 0f, 0f);
-                    if (this.transform.GetChild(0).rotation != Quaternion.Euler(0, 270, 0))
+                    movePoint.position += new Vector3(Input.GetAxisRaw("Horizontal") * 3 - gameData.tileGapLength, 0f, 0f);
+                    if (this.transform.GetChild(0).rotation != Quaternion.Euler(0, 270, 0)) //rotate
                     {
                         this.transform.GetChild(0).rotation = Quaternion.Euler(0, 270, 0);
                     }
@@ -87,8 +98,8 @@ public class Player : MonoBehaviour
                 }
                 else if(Input.GetAxisRaw("Horizontal") > 0 && movable[1]) //right
                 {
-                    movePoint.position += new Vector3(Input.GetAxisRaw("Horizontal") * 3 + 0.2f, 0f, 0f);
-                    if (this.transform.GetChild(0).rotation != Quaternion.Euler(0, 90, 0))
+                    movePoint.position += new Vector3(Input.GetAxisRaw("Horizontal") * 3 + gameData.tileGapLength, 0f, 0f);
+                    if (this.transform.GetChild(0).rotation != Quaternion.Euler(0, 90, 0)) //rotate
                     {
                         this.transform.GetChild(0).rotation = Quaternion.Euler(0, 90, 0);
                     }
@@ -100,7 +111,7 @@ public class Player : MonoBehaviour
                 if (Input.GetAxisRaw("Vertical") < 0 && movable[3])  // back
                 {
                     movePoint.position += new Vector3(0f, 0f, Input.GetAxisRaw("Vertical") * 3 - 0.2f);
-                    if (this.transform.GetChild(0).rotation != Quaternion.Euler(0, 180, 0))
+                    if (this.transform.GetChild(0).rotation != Quaternion.Euler(0, 180, 0)) //rotate
                     {
                         this.transform.GetChild(0).rotation = Quaternion.Euler(0, 180, 0);
                     }
@@ -109,7 +120,7 @@ public class Player : MonoBehaviour
                 else if (Input.GetAxisRaw("Vertical") > 0 && movable[2])  // front
                 {
                     movePoint.position += new Vector3(0f, 0f, Input.GetAxisRaw("Vertical") * 3 + 0.2f);
-                    if (this.transform.GetChild(0).rotation != Quaternion.Euler(0, 0, 0))
+                    if (this.transform.GetChild(0).rotation != Quaternion.Euler(0, 0, 0)) //rotate
                     {
                         this.transform.GetChild(0).rotation = Quaternion.Euler(0, 0, 0);
                     }
@@ -152,7 +163,7 @@ public class Player : MonoBehaviour
             Debug.Log("Triggered Door");
             if (view.IsMine && GameManager.instance.Goal == 3)  //After collect all the goal, the door can be stepped and end game
             {
-                GameManager.instance.CallEndGame();
+                GameManager.instance.CallNextLevel();
             }
         }
 
@@ -215,4 +226,22 @@ public class Player : MonoBehaviour
         animator.SetBool("Attack", true);
     }
 
+    private bool checkMoveCount()
+    {
+        if (PhotonNetwork.LocalPlayer.ActorNumber == 1 && moveCount == gameData.dwarfMovecount) { 
+            return true;
+        }
+        else if (PhotonNetwork.LocalPlayer.ActorNumber == 2 && moveCount == gameData.giantMovecount) 
+        {
+            return true;
+        }
+        else if (PhotonNetwork.LocalPlayer.ActorNumber == 3 && moveCount == gameData.humanMovecount)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 }

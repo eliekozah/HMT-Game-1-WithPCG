@@ -333,11 +333,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 3
+  playerId: 0
   movePoint: {fileID: 0}
   prevMovePointPos: {x: 0, y: 0, z: 0}
   movable: 
   moveCount: 0
   cameraManager: {fileID: 0}
+  gameData: {fileID: 0}
 --- !u!114 &1239359473907977706
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -759,7 +761,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a69de63b74b6244487bb54ec8daddd7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isTriggered: 0
   playerId: 0
 --- !u!1 &6793690996844992314
 GameObject:
