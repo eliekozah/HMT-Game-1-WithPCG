@@ -47,7 +47,7 @@ public class CombatSystem : MonoBehaviour
             if (playerInFight == mainPlayer)
             {
                 combatUIPanel.SetActive(true);
-                showPanel();
+                ShowPanel();
                 if (fightEnd) // show the result for 2 sec
                 {
                     fightEnd = false;
@@ -87,7 +87,7 @@ public class CombatSystem : MonoBehaviour
             enemy.GetComponent<Animator>().SetBool("Idle", false);
         }
     }
-    private void showPanel()
+    private void ShowPanel()
     {
         playerTxt.text = "Player Dice: " + instance.playerDiceNum.ToString();
         if (fightType == 0)

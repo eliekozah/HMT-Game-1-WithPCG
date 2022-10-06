@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,13 +11,15 @@ public class GameManager : MonoBehaviour
     private PhotonView photonView;
     private GameData gameData;
 
+    public GameObject tilePrefabs;
+
     // UI
     public Text turnIndicatorText;
     public Text goalIndicatorText;
     public Text actionCountTxt;
 
     [HideInInspector] public int turn; // Indicate which player's turn
-    [HideInInspector] public GameObject MainPlayer; 
+    public GameObject MainPlayer; 
     [HideInInspector] public List<int> playerIDs = new List<int>(); // All the players' Photon ViewID
     [HideInInspector] public int Goal; // Goal collected, shown on the UI
     [HideInInspector] public int moveLeft; // Player's remaining moves, shown on the UI
@@ -31,13 +34,18 @@ public class GameManager : MonoBehaviour
         playerIDs.Add(0);
         playerIDs.Add(0);
         playerIDs.Add(0);
+        
     }
     private void Start()
     {
         gameData = FindObjectOfType<GameData>();
         turn = 1; // Player 1 goes first
         photonView = GetComponent<PhotonView>();
-        ChangeTurnIndicatorText(); 
+        ChangeTurnIndicatorText();
+        if (SceneManager.GetActiveScene().name == "Level_5")
+        {
+            SetTiles();
+        }
         //setVisalbleObject();
     }
     private void Update()
@@ -154,6 +162,21 @@ public class GameManager : MonoBehaviour
         if (PhotonNetwork.IsMasterClient)
         {
             PhotonNetwork.LoadLevel("Level_" + nextLevel.ToString()); // Load Next Level
+        }
+    }
+
+    private void SetTiles()
+    {
+        GameObject tile;
+        float tileDist = gameData.tileSize + gameData.tileGapLength;
+
+        for (int i = 0; i < 10; i++)
+        {
+            for (int j = 0; j < 10; j++)
+            {
+                tile = Instantiate(tilePrefabs, new Vector3(tileDist * i, 0.227f, tileDist * j), Quaternion.identity);
+                tile.transform.parent = GameObject.Find("Tiles").transform;
+            }
         }
     }
 

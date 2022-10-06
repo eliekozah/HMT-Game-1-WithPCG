@@ -15,6 +15,7 @@ TagManager:
   - GiantDiceSide
   - Walls
   - Door
+  - Corner
   layers:
   - Default
   - TransparentFX

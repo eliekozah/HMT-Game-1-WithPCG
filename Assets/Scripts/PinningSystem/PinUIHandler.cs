@@ -17,8 +17,17 @@ public class PinUIHandler : MonoBehaviour
     private float VisionDistance;
     private float pinDistance;
 
+    private GameData gameData;
+    private Vector3 cameraOffset;
+
+    private void Start()
+    {
+        cameraOffset = GameObject.FindObjectOfType<CameraManager>().cameraOffset;
+    }
+
     public void SetUp(Vector3 pingPosition, int iconType, int player)
     {
+        gameData = GameObject.FindObjectOfType<GameData>();
         playerPinnedIndex = player;
         IconType = iconType;
         this.pingPosition = pingPosition;
@@ -27,15 +36,15 @@ public class PinUIHandler : MonoBehaviour
 
         if (PhotonNetwork.LocalPlayer.ActorNumber == 1)
         {
-            VisionDistance = 4.7f;
+            VisionDistance = (gameData.tileSize + gameData.tileGapLength) * Mathf.Sqrt(2) + 0.5f;
         }
         else if (PhotonNetwork.LocalPlayer.ActorNumber == 2)
         {
-            VisionDistance = 10.2f;
+            VisionDistance = (gameData.tileSize + gameData.tileGapLength) * 2 * Mathf.Sqrt(2) + 0.5f; ;
         }
         else if (PhotonNetwork.LocalPlayer.ActorNumber == 3)
         {
-            VisionDistance = 7.4f;
+            VisionDistance = (gameData.tileSize + gameData.tileGapLength) * 3 * Mathf.Sqrt(2) + 0.5f;
         }
         //Debug.Log("Setup: " + pingPosition + " Player: " + Player);
     }
@@ -55,8 +64,12 @@ public class PinUIHandler : MonoBehaviour
                 this.GetComponent<Image>().sprite = pinIcons[4]; //show location pin icon
             }
             this.GetComponent<Image>().enabled = true;
-            Vector3 fromPosition = new Vector3(Player.position.x, Player.position.z, 0);
+
+            Vector3 cameraViewPos = Camera.main.transform.position - cameraOffset;
+            Vector3 fromPosition = new Vector3(cameraViewPos.x, cameraViewPos.z, 0);
             Vector3 dir = (new Vector3(pingPosition.x, pingPosition.z, 0) - fromPosition).normalized;
+            //Vector3 fromPosition = new Vector3(Player.position.x, Player.position.z, 0);
+            //Vector3 dir = (new Vector3(pingPosition.x, pingPosition.z, 0) - fromPosition).normalized;
             float uiRadius = 250f;
             rectTransform.anchoredPosition = dir * uiRadius;
         }

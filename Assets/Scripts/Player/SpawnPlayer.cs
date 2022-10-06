@@ -63,6 +63,6 @@ public class SpawnPlayer : MonoBehaviour
         {
             GameManager.instance.MainPlayer.transform.GetChild(3).gameObject.SetActive(true); //open vision Mask
         }
-        GameManager.instance.MainPlayer.transform.GetChild(10).gameObject.SetActive(false); //close shared Mask
+        GameManager.instance.MainPlayer.transform.GetChild(6).gameObject.SetActive(false); //close shared Mask
     }
 }

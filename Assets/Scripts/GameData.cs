@@ -12,5 +12,7 @@ public class GameData : MonoBehaviour
     public bool maskOn;
     public float tileSize;
     public float tileGapLength; // the length between tiles, mainlt used in PlayerMovement.cs
-    public bool differentCameraView;
+    public bool differentCameraView; // Whether the view size of each player is different
+
+    public Vector3[] cameraViews;
 }

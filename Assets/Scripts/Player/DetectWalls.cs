@@ -12,7 +12,7 @@ public class DetectWalls : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        view = this.transform.parent.GetComponent<PhotonView>();
+        view = this.transform.parent.parent.GetComponent<PhotonView>();
     }
     void Start()
     {

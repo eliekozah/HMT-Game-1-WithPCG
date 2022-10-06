@@ -7,9 +7,11 @@ public class CameraManager : MonoBehaviour
 {
     public static CameraManager instance;
     public static Camera MainCamera;
+    public GameData gameData;
+
 
     private Transform targetPlayer;
-    private Vector3 cameraOffset;
+    public Vector3 cameraOffset;
 
     public bool cameraIsSet;
 
@@ -24,21 +26,24 @@ public class CameraManager : MonoBehaviour
     {
         MainCamera = Camera.main;
         cameraIsSet = true;
-        if (PhotonNetwork.LocalPlayer.ActorNumber == 1)
+        gameData = FindObjectOfType<GameData>();
+
+        if (gameData.differentCameraView)
         {
-            MainCamera.transform.position = new Vector3(0f, 16.2f, -11.64f);
-            //targetPlayer = GameObject.Find("Human(Clone)").transform;
+            if (PhotonNetwork.LocalPlayer.ActorNumber == 1)
+            {
+                MainCamera.transform.position = gameData.cameraViews[0];
+            }
+            else if (PhotonNetwork.LocalPlayer.ActorNumber == 2)
+            {
+                MainCamera.transform.position = gameData.cameraViews[1];
+            }
+            else if (PhotonNetwork.LocalPlayer.ActorNumber == 3)
+            {
+                MainCamera.transform.position = gameData.cameraViews[2];
+            }
         }
-        else if (PhotonNetwork.LocalPlayer.ActorNumber == 2)
-        {
-            MainCamera.transform.position = new Vector3(3.2f, 36.5f, -34.4f);
-            //targetPlayer = GameObject.Find("Giant(Clone)").transform;
-        }
-        else if (PhotonNetwork.LocalPlayer.ActorNumber == 3)
-        {
-            MainCamera.transform.position = new Vector3(0f, 27.7f, -25.1f);
-            //targetPlayer = GameObject.Find("Dwarf(Clone)").transform;
-        }
+
         targetPlayer = GameManager.instance.MainPlayer.transform;
         cameraOffset = MainCamera.transform.position - targetPlayer.transform.position;
     }

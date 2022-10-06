@@ -12,7 +12,8 @@ public class Player : MonoBehaviour
     [HideInInspector] public int playerId;
     [HideInInspector] public Transform movePoint;
     [HideInInspector] public Vector3 prevMovePointPos;
-    [HideInInspector] public bool[] movable; // detecting walls. index 0: left, 1: right, 2: front, 3: back 
+    public bool[] movable; // detecting walls. index 0: left, 1: right, 2: front, 3: back 
+    [HideInInspector] public GameObject wallDetectors;
 
     [HideInInspector] public int moveCount;
     public static bool changeTurn;
@@ -22,9 +23,12 @@ public class Player : MonoBehaviour
     public CameraManager cameraManager;
     public GameData gameData;
 
+    private bool isReset;
+
     void Awake()
     {
         view = GetComponent<PhotonView>();
+        isReset = false;
 
     }
     private void Start()
@@ -44,6 +48,8 @@ public class Player : MonoBehaviour
 
         animator = this.transform.GetChild(0).GetComponent<Animator>();
         animator.SetBool("Idle", true);
+
+        wallDetectors = this.transform.GetChild(6).gameObject;
     }
 
     void Update()
@@ -52,20 +58,22 @@ public class Player : MonoBehaviour
         {
             if (!gameData.differentCameraView)
             {
-                playerMovement();
+                PlayerMovement();
             }
             else if(cameraManager.cameraIsSet)
             {
-                playerMovement();
+                PlayerMovement();
             }
         }
     }
 
-    private void playerMovement()
+    private void PlayerMovement()
     {
         transform.position = Vector3.MoveTowards(transform.position, movePoint.position, speed * Time.deltaTime);
         if (Vector3.Distance(transform.position, movePoint.position) == 0f)
         {
+            ResetWallDetector();
+            wallDetectors.SetActive(true);
             if (PhotonNetwork.LocalPlayer.ActorNumber == 1)
             {
                 GameManager.instance.CallMoveLeft( gameData.dwarfMovecount - moveCount);
@@ -80,7 +88,7 @@ public class Player : MonoBehaviour
             }
 
             prevMovePointPos = movePoint.position;
-            if (checkMoveCount()) 
+            if (CheckMoveCount()) 
             {
                 moveCount = 0;
                 changeTurn = true;
@@ -134,6 +142,8 @@ public class Player : MonoBehaviour
         }
         else
         {
+            isReset = false;
+            wallDetectors.SetActive(false);
             animator.SetBool("Idle", false);
             animator.SetBool("Attact", false);
             animator.SetBool("Walk", true);
@@ -144,7 +154,7 @@ public class Player : MonoBehaviour
         if (col.gameObject.CompareTag("Goal"))
         {
             Debug.Log("Triggered Goal");
-            if (checkRightGoal(col.gameObject))
+            if (CheckRightGoal(col.gameObject))
             {
                 if (view.IsMine)
                 {
@@ -171,7 +181,7 @@ public class Player : MonoBehaviour
         {
             if (view.IsMine)
             {
-                playAttactAnimation();
+                PlayAttactAnimation();
             }
             Debug.Log("Triggered Rock");
             CombatSystem.instance.isInFight = true;
@@ -181,7 +191,7 @@ public class Player : MonoBehaviour
         {
             if (view.IsMine)
             {
-                playAttactAnimation();
+                PlayAttactAnimation();
             }
             Debug.Log("Triggered Trap");
             CombatSystem.instance.isInFight = true;
@@ -191,7 +201,7 @@ public class Player : MonoBehaviour
         {
             if (view.IsMine)
             {
-                playAttactAnimation();
+                PlayAttactAnimation();
             }
             Debug.Log("Triggered Monster");
             CombatSystem.instance.isInFight = true;
@@ -199,7 +209,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    private bool checkRightGoal(GameObject goal)
+    private bool CheckRightGoal(GameObject goal)
     {
         if (playerId == 0 && goal.name == "DwarfGoal")
         {
@@ -219,14 +229,14 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void playAttactAnimation()
+    private void PlayAttactAnimation()
     {
         animator.SetBool("Idle", false);
         animator.SetBool("Walk", false);
         animator.SetBool("Attack", true);
     }
 
-    private bool checkMoveCount()
+    private bool CheckMoveCount()
     {
         if (PhotonNetwork.LocalPlayer.ActorNumber == 1 && moveCount == gameData.dwarfMovecount) { 
             return true;
@@ -244,4 +254,16 @@ public class Player : MonoBehaviour
             return false;
         }
     }
+
+    private void ResetWallDetector()
+    {
+        if (!isReset)
+        {
+            isReset = true;
+            for (int i = 0; i < 4; i++)
+            {
+                movable[i] = true;
+            }
+        }
+    }        
 }

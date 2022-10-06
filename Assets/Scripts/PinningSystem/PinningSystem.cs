@@ -10,6 +10,7 @@ public class PinningSystem : MonoBehaviour
     private PhotonView photonView;
     private Camera mainCamera;
     private Transform Player;
+    private GameData gameData;
 
     private Ray ray;
     private RaycastHit hit;
@@ -49,21 +50,22 @@ public class PinningSystem : MonoBehaviour
 
     void Start()
     {
+        gameData = GameObject.FindObjectOfType<GameData>();
         mainCamera = Camera.main;
         isPinned = false;
         //isPinnable = false;
         photonView = GetComponent<PhotonView>();
         if (PhotonNetwork.LocalPlayer.ActorNumber == 1)
         {
-            maxVisionDistance = 4.7f;
+            maxVisionDistance = (gameData.tileSize + gameData.tileGapLength) * Mathf.Sqrt(2) + 0.5f;
         }
         else if (PhotonNetwork.LocalPlayer.ActorNumber == 2)
         {
-            maxVisionDistance = 10.2f;
+            maxVisionDistance = (gameData.tileSize + gameData.tileGapLength) * 2 * Mathf.Sqrt(2) + 0.5f;
         }
         else if (PhotonNetwork.LocalPlayer.ActorNumber == 3)
         {
-            maxVisionDistance = 7.4f;
+            maxVisionDistance = (gameData.tileSize + gameData.tileGapLength) * 3 * Mathf.Sqrt(2) + 0.5f;
         }
     }
 
@@ -80,7 +82,7 @@ public class PinningSystem : MonoBehaviour
             {
                 if (Physics.Raycast(ray, out hit, 1000f, LayerMask.GetMask("Ground")))  // if raycast on ground
                 {
-                    pinPosition = new Vector3(hit.transform.position.x, 0, hit.transform.position.z);
+                    pinPosition = new Vector3(hit.transform.position.x, 1f, hit.transform.position.z);
                     pinDistance = Vector3.Distance(Player.position, pinPosition);
                     if (pinDistance < maxVisionDistance)  // if Pin in vision area
                     {

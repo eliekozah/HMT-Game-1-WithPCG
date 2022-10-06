@@ -23,6 +23,7 @@ public class PinView : MonoBehaviour
     {
         if (view.IsMine && col.CompareTag("VisableArea") )
         {
+            //Debug.Log("Trigger Vislable area" + col.GetComponent<PinView>().playerId);
             PinningSystem.pinViewEnable[col.GetComponent<PinView>().playerId] = true;
         }
     }
