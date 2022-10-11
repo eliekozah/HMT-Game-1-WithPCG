@@ -16,6 +16,8 @@ public class Player : MonoBehaviour
     [HideInInspector] public GameObject wallDetectors;
 
     [HideInInspector] public int moveCount;
+
+    [HideInInspector] public GameData.CharacterConfig config;
     public static bool changeTurn;
 
     private Animator animator;
@@ -137,7 +139,7 @@ public class Player : MonoBehaviour
             }
             
             animator.SetBool("Walk", false);
-            animator.SetBool("Attact", false);
+            animator.SetBool("Attack", false);
             animator.SetBool("Idle", true);
         }
         else
@@ -145,7 +147,7 @@ public class Player : MonoBehaviour
             isReset = false;
             wallDetectors.SetActive(false);
             animator.SetBool("Idle", false);
-            animator.SetBool("Attact", false);
+            animator.SetBool("Attack", false);
             animator.SetBool("Walk", true);
         }
     }
