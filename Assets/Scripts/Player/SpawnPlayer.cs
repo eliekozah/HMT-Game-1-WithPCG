@@ -46,14 +46,17 @@ public class SpawnPlayer : MonoBehaviour
         if (PhotonNetwork.LocalPlayer.ActorNumber == 1) // First person that join the game is Dwarf Player
         {
             newPlayer = PhotonNetwork.Instantiate(DwarfPlayer.name, dwarfIniPosistion, Quaternion.identity);
+            newPlayer.GetComponent<Player>().config = gameData.dwarfSettings;
         }
         else if (PhotonNetwork.LocalPlayer.ActorNumber == 2) // Second person that join the game is Giant Player
         {
             newPlayer = PhotonNetwork.Instantiate(GiantPlayer.name, giantIniPosistion, Quaternion.identity);
+            newPlayer.GetComponent<Player>().config = gameData.giantSettings;
         }
         else if (PhotonNetwork.LocalPlayer.ActorNumber == 3) // Third person that join the game is Human Player
         {
             newPlayer = PhotonNetwork.Instantiate(HumanPlayer.name, humanIniPosistion, Quaternion.identity);
+            newPlayer.GetComponent<Player>().config = gameData.humanSettings;
         }
     }
 

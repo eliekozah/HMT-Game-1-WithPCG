@@ -1807,6 +1807,24 @@ MonoBehaviour:
   dwarfMovecount: 2
   giantMovecount: 2
   humanMovecount: 2
+  dwarfSettings:
+    name: Dwarf
+    movement: 2
+    sightRange: 10
+    cameraPosition: {x: 0, y: 0, z: 0}
+    dieFaces: 010000000100000002000000020000000300000003000000
+  giantSettings:
+    name: Giant
+    movement: 2
+    sightRange: 10
+    cameraPosition: {x: 0, y: 0, z: 0}
+    dieFaces: 040000000400000005000000050000000600000006000000
+  humanSettings:
+    name: Human
+    movement: 2
+    sightRange: 10
+    cameraPosition: {x: 0, y: 0, z: 0}
+    dieFaces: 010000000200000003000000040000000500000006000000
   maskOn: 0
   tileSize: 3
   tileGapLength: 0.43
