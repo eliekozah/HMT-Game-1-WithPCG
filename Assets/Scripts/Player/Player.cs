@@ -56,7 +56,7 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        if (view.IsMine && GameManager.instance.turn == PhotonNetwork.LocalPlayer.ActorNumber && !CombatSystem.instance.isInFight)
+        if (view.IsMine && GameManager.instance.turn == PhotonNetwork.LocalPlayer.ActorNumber && !CombatSystem.instance.isInFight && GameManager.instance.isGameStart)
         {
             if (!gameData.differentCameraView)
             {

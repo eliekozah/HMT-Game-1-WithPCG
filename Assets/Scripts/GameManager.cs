@@ -10,13 +10,15 @@ public class GameManager : MonoBehaviour
     public static GameManager instance = null;
     private PhotonView photonView;
     private GameData gameData;
+    public bool isGameStart;
+    public bool[] isFinishedTutorial = new bool[3] { false, false, false };
 
     public GameObject tilePrefabs;
 
     // UI
-    public Text turnIndicatorText;
-    public Text goalIndicatorText;
-    public Text actionCountTxt;
+    private Text turnIndicatorText;
+    private Text goalIndicatorText;
+    private Text actionCountTxt;
 
     [HideInInspector] public int turn; // Indicate which player's turn
     public GameObject MainPlayer; 
@@ -34,14 +36,26 @@ public class GameManager : MonoBehaviour
         playerIDs.Add(0);
         playerIDs.Add(0);
         playerIDs.Add(0);
-        
+        gameData = FindObjectOfType<GameData>();
+
+        if (gameData.gameLevel == 1)
+        {
+            isGameStart = false;
+        }
+        else
+        {
+            isGameStart = true;
+        }
     }
     private void Start()
     {
-        gameData = FindObjectOfType<GameData>();
+        turnIndicatorText = GameObject.Find("UI").GetComponentsInChildren<Text>(true)[0]; 
+        goalIndicatorText = GameObject.Find("GoalCountNum").GetComponent<Text>();
+        actionCountTxt = GameObject.Find("UI").GetComponentsInChildren<Text>(true)[1];
+        Debug.Log(turnIndicatorText.text);
         turn = 1; // Player 1 goes first
         photonView = GetComponent<PhotonView>();
-        ChangeTurnIndicatorText();
+        //ChangeTurnIndicatorText();
         if (SceneManager.GetActiveScene().name == "Level_5")
         {
             SetTiles();
@@ -58,6 +72,16 @@ public class GameManager : MonoBehaviour
         }
         actionCountTxt.text = "Action Left: " + moveLeft.ToString();
         goalIndicatorText.text = Goal.ToString();
+    }
+
+    public void CallStartGame()
+    {
+        photonView.RPC("StartGame", RpcTarget.All);
+    }
+
+    public void CallEndTutorial()
+    {
+        photonView.RPC("EndTutorial", RpcTarget.All, PhotonNetwork.LocalPlayer.ActorNumber);
     }
 
     public void CallChangeTurn()
@@ -129,6 +153,26 @@ public class GameManager : MonoBehaviour
     }
 
     [PunRPC]
+    public void StartGame()
+    {
+        GameObject.Find("WaitForPlayerTxt").SetActive(false);
+        turnIndicatorText.gameObject.SetActive(true);
+        actionCountTxt.gameObject.SetActive(true);
+        ChangeTurnIndicatorText();
+        isGameStart = true;
+    }
+    [PunRPC]
+    public void EndTutorial(int playerNum)
+    {
+        isFinishedTutorial[playerNum-1] = true;
+
+        if (CheckEndTutoial())
+        {
+            CallStartGame();
+        }
+    }
+
+    [PunRPC]
     public void GoalCount()
     {
         Goal++;
@@ -178,6 +222,20 @@ public class GameManager : MonoBehaviour
                 tile.transform.parent = GameObject.Find("Tiles").transform;
             }
         }
+    }
+
+    private bool CheckEndTutoial()
+    {
+        bool isEnd = true;
+        for (int i = 0; i < isFinishedTutorial.Length; i++)
+        {
+            if (!isFinishedTutorial[i])
+            {
+                isEnd = false;
+            }
+        }
+
+        return isEnd;
     }
 
     /*    private void setVisalbleObject()

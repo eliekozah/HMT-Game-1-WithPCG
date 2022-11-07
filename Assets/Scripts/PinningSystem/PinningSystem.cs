@@ -22,7 +22,7 @@ public class PinningSystem : MonoBehaviour
     private bool isPinned;
     public static bool[] pinViewEnable = new bool[3];
 
-    public Text alertMessage;
+    private Text alertMessage;
 
 
     // 3D pin
@@ -32,9 +32,9 @@ public class PinningSystem : MonoBehaviour
     public GameObject omwPinPrefab;
 
     // 2D Pin
-    public GameObject pinWheel;
+    private GameObject pinWheel;
+    private GameObject pinWindow;
     public GameObject pinIconPrefab;
-    public GameObject pinWindow;
     public Sprite[] pinWheelBtnImg = new Sprite[5]; // 0: danger, 1: Assist, 2: OMW, 3: Unknown, 4: cancel; 
     public Sprite[] pinWheelBtnPressedImg = new Sprite[5]; // 0: danger, 1: Assist, 2: OMW, 3: Unknown, 4: cancel; 
 
@@ -53,6 +53,9 @@ public class PinningSystem : MonoBehaviour
         gameData = GameObject.FindObjectOfType<GameData>();
         mainCamera = Camera.main;
         isPinned = false;
+        pinWheel = GameObject.Find("PinWheelUI");
+        pinWindow = GameObject.Find("PinWindow");
+        alertMessage = GameObject.Find("UI").GetComponentsInChildren<Text>(true)[3];
         //isPinnable = false;
         photonView = GetComponent<PhotonView>();
         if (PhotonNetwork.LocalPlayer.ActorNumber == 1)

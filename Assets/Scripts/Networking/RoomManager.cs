@@ -26,6 +26,7 @@ public class RoomManager : MonoBehaviour
         }*/
         if (PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.Players.Count == 3 && !startGame)
         {
+            //PhotonNetwork.LoadLevel("Level_1");
             PhotonNetwork.LoadLevel("Level_1");
             startGame = true;
         }
