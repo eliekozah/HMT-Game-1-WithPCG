@@ -57,25 +57,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c6aa9efad8c07f41aff8eddd62950a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!95 &795423357312008761
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2161550429491492037}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: b0a9aa7ed4a4d1b41abae7ec7e46cc3e, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &2280300393502038700
 GameObject:
   m_ObjectHideFlags: 0
@@ -328,6 +309,12 @@ MonoBehaviour:
   movable: 
   wallDetectors: {fileID: 0}
   moveCount: 0
+  config:
+    name: 
+    movement: 0
+    sightRange: 0
+    cameraPosition: {x: 0, y: 0, z: 0}
+    dieFaces: 000000000000000000000000000000000000000000000000
   cameraManager: {fileID: 0}
   gameData: {fileID: 0}
 --- !u!114 &8730696666416738099
@@ -1247,3 +1234,22 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 87820e66ababe8d4cb3cadbb55da9787, type: 3}
   m_PrefabInstance: {fileID: 1242491536506341780}
   m_PrefabAsset: {fileID: 0}
+--- !u!95 &795423357312008761
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2161550429491492037}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: b0a9aa7ed4a4d1b41abae7ec7e46cc3e, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
