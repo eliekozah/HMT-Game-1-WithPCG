@@ -667,9 +667,29 @@ PrefabInstance:
       propertyPath: sceneViewId
       value: 12
       objectReference: {fileID: 0}
+    - target: {fileID: 6247692751839540488, guid: 326b08689ae9da6438bc945e015efcfb, type: 3}
+      propertyPath: m_UiScaleMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6247692751839540488, guid: 326b08689ae9da6438bc945e015efcfb, type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6247692751839540488, guid: 326b08689ae9da6438bc945e015efcfb, type: 3}
+      propertyPath: m_ReferenceResolution.x
+      value: 960
+      objectReference: {fileID: 0}
+    - target: {fileID: 6247692751839540488, guid: 326b08689ae9da6438bc945e015efcfb, type: 3}
+      propertyPath: m_ReferenceResolution.y
+      value: 540
+      objectReference: {fileID: 0}
+    - target: {fileID: 6247692751839540489, guid: 326b08689ae9da6438bc945e015efcfb, type: 3}
+      propertyPath: m_RenderMode
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6247692751839540490, guid: 326b08689ae9da6438bc945e015efcfb, type: 3}
       propertyPath: m_Name
-      value: 'UI '
+      value: UI
       objectReference: {fileID: 0}
     - target: {fileID: 6247692751839540502, guid: 326b08689ae9da6438bc945e015efcfb, type: 3}
       propertyPath: m_Pivot.x
@@ -705,6 +725,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6247692751839540502, guid: 326b08689ae9da6438bc945e015efcfb, type: 3}
       propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6247692751839540502, guid: 326b08689ae9da6438bc945e015efcfb, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6247692751839540502, guid: 326b08689ae9da6438bc945e015efcfb, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6247692751839540502, guid: 326b08689ae9da6438bc945e015efcfb, type: 3}
+      propertyPath: m_LocalScale.z
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6247692751839540502, guid: 326b08689ae9da6438bc945e015efcfb, type: 3}
@@ -1068,10 +1100,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isGameStart: 0
+  isFinishedTutorial: 000000
   tilePrefabs: {fileID: 0}
-  turnIndicatorText: {fileID: 0}
-  goalIndicatorText: {fileID: 0}
-  actionCountTxt: {fileID: 0}
   turn: 0
   MainPlayer: {fileID: 0}
   playerIDs: 

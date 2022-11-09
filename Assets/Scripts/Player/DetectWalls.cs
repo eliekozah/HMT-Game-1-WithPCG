@@ -45,7 +45,7 @@ public class DetectWalls : MonoBehaviour
     {
         if (view.IsMine && col.CompareTag("Walls"))
         {
-            Debug.Log("Triggered walls " + dir);
+            //Debug.Log("Triggered walls " + dir);
             player.GetComponent<Player>().movable[dir] = false;
         }
     }

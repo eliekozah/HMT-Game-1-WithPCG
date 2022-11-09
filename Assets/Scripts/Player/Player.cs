@@ -155,7 +155,7 @@ public class Player : MonoBehaviour
     {
         if (col.gameObject.CompareTag("Goal"))
         {
-            Debug.Log("Triggered Goal");
+            //Debug.Log("Triggered Goal");
             if (CheckRightGoal(col.gameObject))
             {
                 if (view.IsMine)
@@ -172,7 +172,7 @@ public class Player : MonoBehaviour
 
         if (col.gameObject.CompareTag("Door"))
         {
-            Debug.Log("Triggered Door");
+            //Debug.Log("Triggered Door");
             if (view.IsMine && GameManager.instance.Goal == 3)  //After collect all the goal, the door can be stepped and end game
             {
                 GameManager.instance.CallNextLevel();
@@ -185,7 +185,7 @@ public class Player : MonoBehaviour
             {
                 PlayAttactAnimation();
             }
-            Debug.Log("Triggered Rock");
+            //Debug.Log("Triggered Rock");
             CombatSystem.instance.isInFight = true;
             CombatSystem.instance.StartFight(col.gameObject, 0, this.gameObject);
         }
@@ -195,7 +195,7 @@ public class Player : MonoBehaviour
             {
                 PlayAttactAnimation();
             }
-            Debug.Log("Triggered Trap");
+            //Debug.Log("Triggered Trap");
             CombatSystem.instance.isInFight = true;
             CombatSystem.instance.StartFight(col.gameObject, 1, this.gameObject);
         }
@@ -205,7 +205,7 @@ public class Player : MonoBehaviour
             {
                 PlayAttactAnimation();
             }
-            Debug.Log("Triggered Monster");
+            //Debug.Log("Triggered Monster");
             CombatSystem.instance.isInFight = true;
             CombatSystem.instance.StartFight(col.gameObject, 2, this.gameObject);
         }

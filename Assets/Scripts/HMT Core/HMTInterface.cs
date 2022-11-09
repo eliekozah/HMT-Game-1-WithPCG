@@ -1,7 +1,7 @@
 using Newtonsoft.Json.Linq;
 using UnityEngine;
-using WebSocketSharp;
-using WebSocketSharp.Server;
+/*using WebSocketSharp;
+using WebSocketSharp.Server;*/
 
 namespace HMT {
 
@@ -13,7 +13,7 @@ namespace HMT {
 
         public static HMTInterface Instance { get; private set; }
 
-        [Header("AI Socket Settings")]
+/*        [Header("AI Socket Settings")]
         public bool StartServerOnStart = false;
         public string url = "ws://localhost";
         public int socketPort = 4649;
@@ -136,7 +136,7 @@ namespace HMT {
                 GUILayout.EndVertical();
                 GUILayout.EndScrollView();
                 GUILayout.EndArea();
-            }
+            }*/
         }
 
         /// <summary>
@@ -149,7 +149,7 @@ namespace HMT {
         /// </summary>
         /// <param name="formated">Whether to "pretty print" format the JSON or not.</param>
         /// <returns></returns>
-        public abstract string GetState(bool formated=false);
+/*        public abstract string GetState(bool formated=false);
 
         /// <summary>
         /// Exectutes a player action on behalf of the agent.
@@ -197,7 +197,7 @@ namespace HMT {
             }
             return response;
         }
-    }
+    }*/
 
     /// <summary>
     /// This class is just for facilitating the socket interface. 
@@ -205,7 +205,7 @@ namespace HMT {
     /// My goal would be for no logic to actually live here and instead by 
     /// handled by the ProcessCommand virtual method in the main HMTInterface class.
     /// </summary>
-    public class HMTService : WebSocketBehavior {
+   /* public class HMTService : WebSocketBehavior {
         protected override void OnMessage(MessageEventArgs e) {
             string response = string.Empty;
 
@@ -229,7 +229,7 @@ namespace HMT {
             Debug.LogErrorFormat("[HMTInterface] Error: {0}", e.Message);
             Debug.LogException(e.Exception);
         }
-    }
+    }*/
 
    
 }

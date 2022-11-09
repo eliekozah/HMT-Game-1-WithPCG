@@ -89,6 +89,7 @@ public class AnimationManager : MonoBehaviour
         ShowTxt(txts[8], 5f);
 
         yield return new WaitForSeconds(4f);
+        tutorial.SetActive(false);
         GameManager.instance.CallEndTutorial();
     }
 
@@ -180,7 +181,6 @@ public class AnimationManager : MonoBehaviour
 
     private IEnumerator Drop(Image img, float EndPosY)
     {
-        Debug.Log(img.rectTransform.localPosition.x);
         while (img.rectTransform.localPosition.y > EndPosY)
         {
             img.rectTransform.localPosition = new Vector3(img.rectTransform.localPosition.x, img.rectTransform.localPosition.y - Time.deltaTime*300, 0);
@@ -189,7 +189,7 @@ public class AnimationManager : MonoBehaviour
     }
     private IEnumerator Drop(GameObject obj)
     {
-        Debug.Log(obj.GetComponent<RectTransform>().localPosition.x);
+        //Debug.Log(obj.GetComponent<RectTransform>().localPosition.x);
         while (obj.GetComponent<RectTransform>().localPosition.y > 0)
         {
             obj.GetComponent<RectTransform>().localPosition = new Vector3(obj.GetComponent<RectTransform>().localPosition.x, obj.GetComponent<RectTransform>().localPosition.y - Time.deltaTime * 300, 0);

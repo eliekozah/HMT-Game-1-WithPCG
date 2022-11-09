@@ -49,13 +49,23 @@ public class GameManager : MonoBehaviour
     }
     private void Start()
     {
+        //Debug.Log(GameObject.Find("UI").name);
         turnIndicatorText = GameObject.Find("UI").GetComponentsInChildren<Text>(true)[0]; 
         goalIndicatorText = GameObject.Find("GoalCountNum").GetComponent<Text>();
         actionCountTxt = GameObject.Find("UI").GetComponentsInChildren<Text>(true)[1];
-        Debug.Log(turnIndicatorText.text);
+        
+        //Debug.Log(turnIndicatorText.text);
         turn = 1; // Player 1 goes first
         photonView = GetComponent<PhotonView>();
-        //ChangeTurnIndicatorText();
+
+        if (isGameStart)
+        {
+            GameObject.Find("WaitForPlayerTxt").SetActive(false);
+            turnIndicatorText.gameObject.SetActive(true);
+            actionCountTxt.gameObject.SetActive(true);
+            ChangeTurnIndicatorText();
+        }
+
         if (SceneManager.GetActiveScene().name == "Level_5")
         {
             SetTiles();
@@ -67,7 +77,7 @@ public class GameManager : MonoBehaviour
         if (Player.changeTurn) // if turn changed
         {
             Player.changeTurn = false;
-            Debug.Log("Change Turn");
+            //Debug.Log("Change Turn");
             CallChangeTurn();
         }
         actionCountTxt.text = "Action Left: " + moveLeft.ToString();
@@ -166,7 +176,7 @@ public class GameManager : MonoBehaviour
     {
         isFinishedTutorial[playerNum-1] = true;
 
-        if (CheckEndTutoial())
+        if (CheckEndTutoial() && PhotonNetwork.IsMasterClient)
         {
             CallStartGame();
         }

@@ -30,15 +30,15 @@ public class CameraManager : MonoBehaviour
 
         if (gameData.differentCameraView)
         {
-            if (PhotonNetwork.LocalPlayer.ActorNumber == 1)
+            if (PhotonNetwork.LocalPlayer.ActorNumber == 1) //Dwarf view
             {
                 MainCamera.transform.position = gameData.cameraViews[0];
             }
-            else if (PhotonNetwork.LocalPlayer.ActorNumber == 2)
+            else if (PhotonNetwork.LocalPlayer.ActorNumber == 2) //Giant view
             {
                 MainCamera.transform.position = gameData.cameraViews[1];
             }
-            else if (PhotonNetwork.LocalPlayer.ActorNumber == 3)
+            else if (PhotonNetwork.LocalPlayer.ActorNumber == 3) //Human view
             {
                 MainCamera.transform.position = gameData.cameraViews[2];
             }

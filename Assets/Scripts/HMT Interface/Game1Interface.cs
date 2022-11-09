@@ -12,7 +12,7 @@ using Photon.Pun.Demo.Cockpit.Forms;
 
 public class Game1Interface : HMTInterface {
 
-    [Header("Game Specific Settings")]
+/*    [Header("Game Specific Settings")]
     public KeyCode[] RecaptureHotKey;
     
     GameObject[] monsters;
@@ -78,7 +78,7 @@ public class Game1Interface : HMTInterface {
             monsters.Length,
             traps.Length,
             stones.Length) ;
-        /*
+        *//*
          * Still need to find:
          *  The grid positions
          *      which can also be used to establish a discrete grid size instead of global space
@@ -87,7 +87,7 @@ public class Game1Interface : HMTInterface {
          *  Players
          *  
          * 
-         */ 
+         *//* 
     }
 
 
@@ -260,6 +260,6 @@ public class Game1Interface : HMTInterface {
 
     public override string ExecuteAction(string action) {
         return "No Action to Execute for now.";
-    }
+    }*/
 
 }

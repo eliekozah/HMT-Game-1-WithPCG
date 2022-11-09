@@ -31,6 +31,10 @@ public class CombatSystem : MonoBehaviour
 
     void Start()
     {
+        combatUIPanel = GameObject.Find("UI").transform.GetChild(6).gameObject;
+        enemyTxt = combatUIPanel.GetComponentsInChildren<Text>(true)[0];
+        playerTxt = combatUIPanel.GetComponentsInChildren<Text>(true)[1];
+        resultTxt = combatUIPanel.GetComponentsInChildren<Text>(true)[2];
         instance = this;
         playerDiceNum = 0;
         isInFight = false;
