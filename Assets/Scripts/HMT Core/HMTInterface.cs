@@ -1,7 +1,9 @@
 using Newtonsoft.Json.Linq;
 using UnityEngine;
-/*using WebSocketSharp;
-using WebSocketSharp.Server;*/
+#if HMT_BUILD
+using WebSocketSharp;
+using WebSocketSharp.Server;
+#endif
 
 namespace HMT {
 
@@ -13,21 +15,8 @@ namespace HMT {
 
         public static HMTInterface Instance { get; private set; }
 
-/*        [Header("AI Socket Settings")]
-        public bool StartServerOnStart = false;
-        public string url = "ws://localhost";
-        public int socketPort = 4649;
-        public string serviceName = "hmt";
-
-        [Header("Hot Keys")]
-        public KeyCode[] OpenHMTInterfaceWindowHotKey;
-        public KeyCode[] PrintCurrentStateHotKey;
-        
-        
-        private bool isOpen=false;
-        private Vector2 scrollPos = Vector2.zero;
+#if HMT_BUILD
         private WebSocketServer server = null;
-          
 
         // Start is called before the first frame update
         virtual protected void Start() {
@@ -55,15 +44,6 @@ namespace HMT {
             server.Start(); 
             Debug.LogFormat("[HMTInterface] Websocket for HMTService at url {0}:{1}/{2}",
                 url, socketPort, serviceName);
-        }
-
-        protected bool CheckHotKey(KeyCode[] code ) {
-            foreach(KeyCode key in code) {
-                if (!Input.GetKey(key)) {
-                    return false;
-                }
-            }
-            return code.Length > 0;
         }
 
         virtual protected void OnDestroy() {
@@ -136,7 +116,43 @@ namespace HMT {
                 GUILayout.EndVertical();
                 GUILayout.EndScrollView();
                 GUILayout.EndArea();
-            }*/
+            }
+        }
+
+
+#else 
+        virtual protected void Start() {
+            Debug.LogWarning("HMT_BUILD flag not set. Destroying HMTInterface");
+            Destroy(this.gameObject);
+        }
+
+        virtual protected void Update() { }
+
+
+#endif
+
+
+        [Header("AI Socket Settings")]
+        public bool StartServerOnStart = false;
+        public string url = "ws://localhost";
+        public int socketPort = 4649;
+        public string serviceName = "hmt";
+
+        [Header("Hot Keys")]
+        public KeyCode[] OpenHMTInterfaceWindowHotKey;
+        public KeyCode[] PrintCurrentStateHotKey;
+
+
+        private bool isOpen = false;
+        private Vector2 scrollPos = Vector2.zero;
+
+        protected bool CheckHotKey(KeyCode[] code) {
+            foreach (KeyCode key in code) {
+                if (!Input.GetKey(key)) {
+                    return false;
+                }
+            }
+            return code.Length > 0;
         }
 
         /// <summary>
@@ -149,7 +165,7 @@ namespace HMT {
         /// </summary>
         /// <param name="formated">Whether to "pretty print" format the JSON or not.</param>
         /// <returns></returns>
-/*        public abstract string GetState(bool formated=false);
+        public abstract string GetState(bool formated = false);
 
         /// <summary>
         /// Exectutes a player action on behalf of the agent.
@@ -158,7 +174,7 @@ namespace HMT {
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        public abstract string ExecuteAction(string action); 
+        public abstract string ExecuteAction(string action);
 
         /// <summary>
         /// Process a command comming off of the Websocket Protocol.
@@ -175,7 +191,7 @@ namespace HMT {
         /// <param name="json"></param>
         /// <param name="preventDefault"></param>
         /// <returns></returns>
-        public virtual string ProcessCommand(string command, JObject json, bool preventDefault=false) {
+        public virtual string ProcessCommand(string command, JObject json, bool preventDefault = false) {
             string response = string.Empty;
             switch (command) {
                 case "get_state":
@@ -197,7 +213,9 @@ namespace HMT {
             }
             return response;
         }
-    }*/
+    }
+
+#if HMT_BUILD
 
     /// <summary>
     /// This class is just for facilitating the socket interface. 
@@ -205,7 +223,7 @@ namespace HMT {
     /// My goal would be for no logic to actually live here and instead by 
     /// handled by the ProcessCommand virtual method in the main HMTInterface class.
     /// </summary>
-   /* public class HMTService : WebSocketBehavior {
+    public class HMTService : WebSocketBehavior {
         protected override void OnMessage(MessageEventArgs e) {
             string response = string.Empty;
 
@@ -229,7 +247,8 @@ namespace HMT {
             Debug.LogErrorFormat("[HMTInterface] Error: {0}", e.Message);
             Debug.LogException(e.Exception);
         }
-    }*/
+    }
 
-   
+#endif
+
 }
