@@ -159,7 +159,7 @@ public class CombatSystem : MonoBehaviour
         else if (MonsterFightCount < MAXFIGHT - 1) // lose a chances
         {
             MonsterFightCount++;
-            playerInFight.transform.GetChild(3).gameObject.GetComponent<DiceRoll>().ReRoll();
+            playerInFight.transform.GetChild(3).gameObject.GetComponent<DiceRoll>().CallReroll();
             yield return new WaitForSeconds(1f);
             int chanceLeft = MAXFIGHT - MonsterFightCount;
             resultTxt.text = chanceLeft.ToString() + " chances left.";

@@ -71,12 +71,18 @@ public class DiceRoll : MonoBehaviour
         GetComponent<Rigidbody>().useGravity = false;
     }
 
-    public void ReRoll()
+    public void CallReroll()
+    {
+        StartCoroutine(ReRoll());
+    }
+    public IEnumerator ReRoll()
     {
         resetPostion();
         diceRolled = false;
         diceSpinning = false;
-        endGame = false;
+        //endGame = false;
         GetComponent<Rigidbody>().useGravity = false;
+        yield return new WaitForSeconds(2f);
+        diceRolled = true;
     }
 }
