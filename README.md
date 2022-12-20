@@ -9,4 +9,4 @@ The easiest way to run the game locally is to:
 2. Compile the game to your local platform (or use the WebGL build target) See [Unity's Documentation](https://docs.unity3d.com/Manual/PublishingBuilds.html) for how to build a project.
 3. Run the compiled build twice, and run a third instance from within the Unity Editor.
 4. Use one instance to create a room and the other two to connect.
-5. In this forked repo, I generate the Unity Level from a JSON file created by a PCG tool based on Wave Function Collapse algorithm. Level is generated using myLevel.JSON file in /Assets/Resources
+5. In this forked repo, I generate the Unity Level from a JSON file created by a PCG tool based on Wave Function Collapse algorithm (https://github.com/eliekozah/PCGToolForDiceAdventureGame). Level is generated using myLevel.JSON file in /Assets/Resources
