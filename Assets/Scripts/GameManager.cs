@@ -24,6 +24,15 @@ public class GameManager : MonoBehaviour
     public int moveLeft;
 
 
+
+    /**/
+
+
+
+
+    /**/
+
+
     private void Awake()
     {
         instance = this;

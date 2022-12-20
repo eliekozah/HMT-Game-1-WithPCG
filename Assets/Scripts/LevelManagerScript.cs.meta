@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 95dd75e0e31a8284cb40509763a4ed2f
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - levelJSON: {fileID: 4900000, guid: e9a6dbfe0ef7ed649a460d2327e988be, type: 3}
+  - rockContainer: {instanceID: 0}
+  - monsterContainer: {instanceID: 0}
+  - trapContainer: {instanceID: 0}
+  - Rock1: {instanceID: 0}
+  - Monster1: {instanceID: 0}
+  - Trap1: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
